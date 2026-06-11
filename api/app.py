@@ -56,10 +56,15 @@ async def create_summary(
             max_ocr_pages=max_ocr_pages,
         )
         state = agent.run()
+        
+    draft_path = output_dir / "draft.md"
+    draft_content = draft_path.read_text(encoding="utf-8") if draft_path.exists() else "Draft not generated."
+
 
     return JSONResponse({
         "patient_id": patient_id,
-        "draft_path": str(output_dir / "draft.md"),
+        "draft": draft_content,
+        "draft_path": str(draft_path),
         "summary_path": str(output_dir / "summary.json"),
         "trace_path": str(output_dir / "trace.jsonl"),
         "flags": [
